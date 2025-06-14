@@ -39,7 +39,7 @@ export function PaginatedTable<T>({
   const start = (currentPage - 1) * itemsPerPage;
 
   const sortedData = sortBy
-  ? [...data].sort((a, b) => {
+    ? [...data].sort((a, b) => {
       const aVal = a[sortBy];
       const bVal = b[sortBy];
 
@@ -51,7 +51,7 @@ export function PaginatedTable<T>({
         ? String(aVal).localeCompare(String(bVal))
         : String(bVal).localeCompare(String(aVal));
     })
-  : data;
+    : data;
 
   const currentData = sortedData.slice(start, start + itemsPerPage);
 
@@ -97,21 +97,21 @@ export function PaginatedTable<T>({
               .filter((col) => col.accessor !== 'id')
               .map((col) => (
                 <th
-  key={col.accessor as string}
-  style={{ borderBottom: '1px solid #ccc', textAlign: 'left', cursor: col.sortable ? 'pointer' : 'default' }}
-  onClick={() => {
-    if (!col.sortable) return;
-    if (sortBy === col.accessor) {
-      setSortAsc(!sortAsc);
-    } else {
-      setSortBy(col.accessor);
-      setSortAsc(true);
-    }
-  }}
->
-  {col.header}
-  {col.sortable && sortBy === col.accessor && (sortAsc ? ' ▲' : ' ▼')}
-</th>
+                  key={col.accessor as string}
+                  style={{ borderBottom: '1px solid #ccc', textAlign: 'left', cursor: col.sortable ? 'pointer' : 'default' }}
+                  onClick={() => {
+                    if (!col.sortable) return;
+                    if (sortBy === col.accessor) {
+                      setSortAsc(!sortAsc);
+                    } else {
+                      setSortBy(col.accessor);
+                      setSortAsc(true);
+                    }
+                  }}
+                >
+                  {col.header}
+                  {col.sortable && sortBy === col.accessor && (sortAsc ? ' ▲' : ' ▼')}
+                </th>
               ))}
             {(renderEditDialog || renderDeleteDialog) && (
               <th style={{ borderBottom: '1px solid #ccc' }}>Actions</th>

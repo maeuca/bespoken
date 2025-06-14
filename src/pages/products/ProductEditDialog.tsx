@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import type { Product } from '../../types/openapi/models/Product';
 import { ProductsService } from '../../types/openapi/services/ProductsService';
+import { TextBox } from '../../components/textbox/Textbox';
+import { NumberBox } from '../../components/numberbox/NumberBox';
 
 interface Props {
   product: Product;
@@ -56,26 +58,47 @@ const ProductEditDialog: React.FC<Props> = ({ product, onUpdate, onClose }) => {
     <div style={dialogStyle}>
       <h3>Edit Product</h3>
 
-      {['name', 'manufacturer', 'style'].map((field) => (
-        <input
-          key={field}
-          style={inputStyle}
-          placeholder={field}
-          value={form[field as keyof Product] as string}
-          onChange={(e) => handleChange(field as keyof Product, e.target.value)}
-        />
-      ))}
+      <TextBox
+        label="Name"
+        value={form.name}
+        onChange={(value) => handleChange('name', value)}
+      />
 
-      {['purchasePrice', 'salePrice', 'qtyOnHand', 'commissionPercentage'].map((field) => (
-        <input
-          key={field}
-          style={inputStyle}
-          type="number"
-          placeholder={field}
-          value={form[field as keyof Product] as number}
-          onChange={(e) => handleChange(field as keyof Product, parseFloat(e.target.value))}
-        />
-      ))}
+      <TextBox
+        label="Manufacturer"
+        value={form.manufacturer}
+        onChange={(value) => handleChange('manufacturer', value)}
+      />
+
+      <TextBox
+        label="Style"
+        value={form.style}
+        onChange={(value) => handleChange('style', value)}
+      />
+
+      <NumberBox
+        label="Purchase Price"
+        value={form.purchasePrice}
+        onChange={(value) => handleChange('purchasePrice', value)}
+      />
+
+      <NumberBox
+        label="Sales Price"
+        value={form.salePrice}
+        onChange={(value) => handleChange('salePrice', value)}
+      />
+
+      <NumberBox
+        label="Quantity on Hand"
+        value={form.qtyOnHand}
+        onChange={(value) => handleChange('qtyOnHand', value)}
+      />
+
+      <NumberBox
+        label="Commission Percentage"
+        value={form.commissionPercentage}
+        onChange={(value) => handleChange('commissionPercentage', value)}
+      />
 
       {error && <p style={{ color: 'red' }}>{error}</p>}
 

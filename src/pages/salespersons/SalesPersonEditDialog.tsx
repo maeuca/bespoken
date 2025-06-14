@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { SalesPersonsService } from '../../types/openapi/services/SalesPersonsService';
 import type { SalesPerson } from '../../types/openapi/models/SalesPerson';
-import { formRowStyle, inputStyle, labelStyle } from '../../styles';
+import { DateBox } from '../../components/date/Datebox';
+import { TextBox } from '../../components/textbox/Textbox';
 
 interface Props {
   salesPerson: SalesPerson;
@@ -27,14 +28,14 @@ const SalesPersonEditDialog: React.FC<Props> = ({ salesPerson, onUpdate, onClose
   const [lastName, setLastName] = useState(salesPerson.lastName);
   const [address, setAddress] = useState(salesPerson.address);
   const [phone, setPhone] = useState(salesPerson.phone || '');
- const [startDate, setStartDate] = useState(() => {
-  if (!salesPerson.startDate) return '';
-  try {
-    return new Date(salesPerson.startDate).toISOString().split('T')[0];
-  } catch {
-    return '';
-  }
-});
+  const [startDate, setStartDate] = useState(() => {
+    if (!salesPerson.startDate) return '';
+    try {
+      return new Date(salesPerson.startDate).toISOString().split('T')[0];
+    } catch {
+      return '';
+    }
+  });
   const [manager, setManager] = useState(salesPerson.manager || '');
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -72,35 +73,35 @@ const SalesPersonEditDialog: React.FC<Props> = ({ salesPerson, onUpdate, onClose
     <div style={dialogStyle}>
       <h3>Edit SalesPerson</h3>
 
-      <div style={formRowStyle}>
-        <label style={labelStyle}>First Name:</label>
-        <input style={inputStyle} value={firstName} onChange={e => setFirstName(e.target.value)} />
-      </div>
+      <TextBox
+        value={firstName}
+        label="First Name"
+        onChange={setFirstName} />
 
-      <div style={formRowStyle}>
-        <label style={labelStyle}>Last Name:</label>
-        <input style={inputStyle} value={lastName} onChange={e => setLastName(e.target.value)} />
-      </div>
+      <TextBox
+        value={lastName}
+        label="Last Name"
+        onChange={setLastName} />
 
-      <div style={formRowStyle}>
-        <label style={labelStyle}>Address:</label>
-        <input style={inputStyle} value={address} onChange={e => setAddress(e.target.value)} />
-      </div>
+      <TextBox
+        value={address}
+        label="Address"
+        onChange={setAddress} />
 
-      <div style={formRowStyle}>
-        <label style={labelStyle}>Phone:</label>
-        <input style={inputStyle} value={phone} onChange={e => setPhone(e.target.value)} />
-      </div>
+      <TextBox
+        value={phone}
+        label="Phone"
+        onChange={setPhone} />
 
-      <div style={formRowStyle}>
-        <label style={labelStyle}>Start Date:</label>
-        <input style={inputStyle} type="date" value={startDate} onChange={e => setStartDate(e.target.value)} />
-      </div>
+      <DateBox
+        value={startDate}
+        label="Start Date"
+        onChange={setStartDate} />
 
-      <div style={formRowStyle}>
-        <label style={labelStyle}>Manager:</label>
-        <input style={inputStyle} value={manager} onChange={e => setManager(e.target.value)} />
-      </div>
+      <TextBox
+        value={manager}
+        label="Manager"
+        onChange={setManager} />
 
       {error && <p style={{ color: 'red' }}>{error}</p>}
 

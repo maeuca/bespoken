@@ -1,0 +1,22 @@
+import React from 'react';
+import { formRowStyle, labelStyle, inputStyle } from '../../styles';
+
+interface NumberBoxProps {
+  value: number;
+  label?: string;
+  onChange: (value: number) => void;
+}
+
+export const NumberBox: React.FC<NumberBoxProps> = ({ value, label, onChange }) => {
+  return (
+    <div style={formRowStyle}>
+      <label style={labelStyle}>{label}</label>
+      <input
+        type="number"
+        style={inputStyle}
+        value={isNaN(value) ? '' : value}
+        onChange={(e) => onChange(parseFloat(e.target.value))}
+      />
+    </div>
+  );
+};

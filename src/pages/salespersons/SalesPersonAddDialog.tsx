@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { SalesPersonsService } from '../../types/openapi/services/SalesPersonsService';
 import type { SalesPerson } from '../../types/openapi/models/SalesPerson';
 import { formRowStyle, inputStyle, labelStyle } from '../../styles';
+import { TextBox } from '../../components/textbox/Textbox';
+import { DateBox } from '../../components/date/Datebox';
 
 interface Props {
   onAdd: (newPerson: SalesPerson) => void;
@@ -36,9 +38,9 @@ export const SalesPersonAddDialog: React.FC<Props> = ({ onAdd, onClose, salesPer
     setError(null);
 
     const duplicate = salesPersons.some(p =>
-    p.firstName.trim().toLowerCase() === firstName.trim().toLowerCase() &&
-    p.lastName.trim().toLowerCase() === lastName.trim().toLowerCase()
-  );
+      p.firstName.trim().toLowerCase() === firstName.trim().toLowerCase() &&
+      p.lastName.trim().toLowerCase() === lastName.trim().toLowerCase()
+    );
     if (duplicate) {
       setError('A salesperson with this name already exists.');
       setSubmitting(false);
@@ -70,35 +72,35 @@ export const SalesPersonAddDialog: React.FC<Props> = ({ onAdd, onClose, salesPer
     <div style={dialogStyle}>
       <h3>New SalesPerson</h3>
 
-      <div style={formRowStyle}>
-        <label style={labelStyle}>First Name:</label>
-        <input style={inputStyle} value={firstName} onChange={e => setFirstName(e.target.value)} />
-      </div>
+      <TextBox
+        value={firstName}
+        label="First Name"
+        onChange={setFirstName} />
 
-      <div style={formRowStyle}>
-        <label style={labelStyle}>Last Name:</label>
-        <input style={inputStyle} value={lastName} onChange={e => setLastName(e.target.value)} />
-      </div>
+      <TextBox
+        value={lastName}
+        label="Last Name"
+        onChange={setLastName} />
 
-      <div style={formRowStyle}>
-        <label style={labelStyle}>Address:</label>
-        <input style={inputStyle} value={address} onChange={e => setAddress(e.target.value)} />
-      </div>
+      <TextBox
+        value={address}
+        label="Address"
+        onChange={setAddress} />
 
-      <div style={formRowStyle}>
-        <label style={labelStyle}>Phone:</label>
-        <input style={inputStyle} value={phone} onChange={e => setPhone(e.target.value)} />
-      </div>
+      <TextBox
+        value={phone}
+        label="Phone"
+        onChange={setPhone} />
 
-      <div style={formRowStyle}>
-        <label style={labelStyle}>Start Date:</label>
-        <input style={inputStyle} type="date" value={startDate} onChange={e => setStartDate(e.target.value)} />
-      </div>
+      <DateBox
+        value={startDate}
+        label="Start Date"
+        onChange={setStartDate} />
 
-      <div style={formRowStyle}>
-        <label style={labelStyle}>Manager:</label>
-        <input style={inputStyle} value={manager} onChange={e => setManager(e.target.value)} />
-      </div>
+      <TextBox
+        value={manager}
+        label="Manager"
+        onChange={setManager} />
 
       {error && <p style={{ color: 'red' }}>{error}</p>}
 

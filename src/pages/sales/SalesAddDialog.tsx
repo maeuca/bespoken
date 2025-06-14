@@ -5,6 +5,8 @@ import type { Customer } from '../../types/openapi/models/Customer';
 import type { SalesPerson } from '../../types/openapi/models/SalesPerson';
 import { SalesService } from '../../types/openapi/services/SalesService';
 import { formRowStyle, inputStyle, labelStyle } from '../../styles';
+import { SelectList } from '../../components/select/SelectList';
+import { DateBox } from '../../components/date/Datebox';
 
 interface Props {
   products: Product[];
@@ -60,43 +62,46 @@ const SalesAddDialog: React.FC<Props> = ({ products, customers, salesPeople, onA
     <div style={dialogStyle}>
       <h3>Add New Sale</h3>
 
-      <div style={formRowStyle}>
-        <label style={labelStyle}>Product:</label>
-        <select style={inputStyle} value={productId} onChange={(e) => setProductId(Number(e.target.value))}>
-          {products.map((p) => (
-            <option key={p.id} value={p.id}>
-              {p.name}
-            </option>
-          ))}
-        </select>
-      </div>
 
-      <div style={formRowStyle}>
-        <label style={labelStyle}>Customer:</label>
-        <select style={inputStyle}  value={customerId} onChange={(e) => setCustomerId(Number(e.target.value))}>
-          {customers.map((c) => (
-            <option key={c.id} value={c.id}>
-              {c.firstName} {c.lastName}
-            </option>
-          ))}
-        </select>
-      </div>
+      <SelectList
+        items={products.map(p => ({ id: p.id, name: p.name }))}
+        label={'Product'}
+        selectedItem={productId.toString()}
+        onSelect={(item) => {
+          if (item !== undefined) {
+            setProductId(Number(item));
+          }
+        }}
+      />
 
-      <div style={formRowStyle}>
-        <label style={labelStyle}>Salesperson:</label>
-        <select style={inputStyle} value={salesPersonId} onChange={(e) => setSalesPersonId(Number(e.target.value))}>
-          {salesPeople.map((s) => (
-            <option key={s.id} value={s.id}>
-              {s.firstName} {s.lastName}
-            </option>
-          ))}
-        </select>
-      </div>
+      <SelectList
+        items={customers.map(p => ({ id: p.id, name: `${p.firstName} ${p.lastName}` }))}
+        label={'Customer'}
+        selectedItem={customerId}
+        onSelect={(item) => {
+          if (item !== undefined) {
+            setCustomerId(Number(item));
+          }
+        }}
+      />
 
-      <div style={formRowStyle}>
-        <label style={labelStyle}>Date:</label>
-        <input style={inputStyle} type="date" value={date} onChange={(e) => setDate(e.target.value)} />
-      </div>
+      <SelectList
+        items={salesPeople.map(s => ({ id: s.id, name: `${s.firstName} ${s.lastName}` }))}
+        label={'Salesperson'}
+        selectedItem={salesPersonId}
+        onSelect={(item) => {
+          if (item !== undefined) {
+            setSalesPersonId(Number(item));
+          }
+        }
+        } />
+
+      <DateBox
+        value={date}
+        label="Date"
+        onChange={setDate}
+      />
+
 
       {error && <p style={{ color: 'red' }}>{error}</p>}
 

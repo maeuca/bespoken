@@ -85,10 +85,13 @@ const SalesPersonsTable: React.FC = () => {
 
   return (
     <PaginatedTable
+      title="Sales Agents"
       data={salesPeople}
       columns={columns}
       itemsPerPage={10}
       renderEditDialog={renderEditDialog}
+      renderAddDialog={renderAddDialog}
+      renderDeleteDialog={renderDeleteDialog}
     />
   );
 };

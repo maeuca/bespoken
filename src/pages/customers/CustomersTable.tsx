@@ -39,6 +39,7 @@ const CustomersTable: React.FC = () => {
 
   return (
     <PaginatedTable
+      title="Customers"
       data={customers}
       columns={columns}
       itemsPerPage={10}

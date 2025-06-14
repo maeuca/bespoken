@@ -61,6 +61,7 @@ const SalesTable: React.FC = () => {
                     return value ? String(value) : '—';
                 }
             },
+            sortable: true,
         },
         {
             header: 'Price',
@@ -102,6 +103,7 @@ const SalesTable: React.FC = () => {
 
     return (
         <PaginatedTable
+            title="Sales Records"
             data={sales}
             columns={columns}
             itemsPerPage={10}

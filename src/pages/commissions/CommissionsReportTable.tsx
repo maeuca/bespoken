@@ -68,6 +68,7 @@ const CommissionReportTable: React.FC = () => {
 
   return (
     <PaginatedTable
+      title="Commission Report"
       data={reportData}
       columns={columns}
       itemsPerPage={10}

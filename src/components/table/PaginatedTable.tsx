@@ -5,12 +5,14 @@ export type Column<T> = {
   header: string;
   accessor: keyof T;
   render?: (value: T[keyof T], row: T) => React.ReactNode;
+  sortable?: boolean;
 };
 
 type PaginatedTableProps<T> = {
   data: T[];
   columns: Column<T>[];
   itemsPerPage?: number;
+  title?: string;
   renderEditDialog?: (row: T, close: () => void) => React.ReactNode;
   renderAddDialog?: (close: () => void) => React.ReactNode;
   renderDeleteDialog?: (row: T, close: () => void) => React.ReactNode;
@@ -20,6 +22,7 @@ export function PaginatedTable<T>({
   data,
   columns,
   itemsPerPage = 10,
+  title = 'View Records',
   renderEditDialog,
   renderAddDialog,
   renderDeleteDialog,
@@ -29,9 +32,28 @@ export function PaginatedTable<T>({
   const [showAddDialog, setShowAddDialog] = useState(false);
   const [deletingRow, setDeletingRow] = useState<T | null>(null);
 
+  const [sortBy, setSortBy] = useState<keyof T | null>(null);
+  const [sortAsc, setSortAsc] = useState(true);
+
   const totalPages = Math.ceil(data.length / itemsPerPage);
   const start = (currentPage - 1) * itemsPerPage;
-  const currentData = data.slice(start, start + itemsPerPage);
+
+  const sortedData = sortBy
+  ? [...data].sort((a, b) => {
+      const aVal = a[sortBy];
+      const bVal = b[sortBy];
+
+      if (typeof aVal === 'number' && typeof bVal === 'number') {
+        return sortAsc ? aVal - bVal : bVal - aVal;
+      }
+
+      return sortAsc
+        ? String(aVal).localeCompare(String(bVal))
+        : String(bVal).localeCompare(String(aVal));
+    })
+  : data;
+
+  const currentData = sortedData.slice(start, start + itemsPerPage);
 
   const handlePrev = () => currentPage > 1 && setCurrentPage(p => p - 1);
   const handleNext = () => currentPage < totalPages && setCurrentPage(p => p + 1);
@@ -42,6 +64,9 @@ export function PaginatedTable<T>({
 
   return (
     <div>
+      <h2 style={{ marginBottom: '1rem' }}>{title}</h2>
+
+      {/* Edit Dialog Button */}
       {/* New Record Button */}
       {renderAddDialog && (
         <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '0.5rem' }}>
@@ -71,9 +96,22 @@ export function PaginatedTable<T>({
             {columns
               .filter((col) => col.accessor !== 'id')
               .map((col) => (
-                <th key={col.accessor as string} style={{ borderBottom: '1px solid #ccc', textAlign: 'left' }}>
-                  {col.header}
-                </th>
+                <th
+  key={col.accessor as string}
+  style={{ borderBottom: '1px solid #ccc', textAlign: 'left', cursor: col.sortable ? 'pointer' : 'default' }}
+  onClick={() => {
+    if (!col.sortable) return;
+    if (sortBy === col.accessor) {
+      setSortAsc(!sortAsc);
+    } else {
+      setSortBy(col.accessor);
+      setSortAsc(true);
+    }
+  }}
+>
+  {col.header}
+  {col.sortable && sortBy === col.accessor && (sortAsc ? ' ▲' : ' ▼')}
+</th>
               ))}
             {(renderEditDialog || renderDeleteDialog) && (
               <th style={{ borderBottom: '1px solid #ccc' }}>Actions</th>

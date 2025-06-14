@@ -15,7 +15,7 @@ const drawerItems: DrawerItem[] = [
   { label: "Customers", path: "/customers", icon: <FaUsers /> },
   { label: "Products", path: "/products", icon: <FaBoxOpen /> },
   { label: "Sales", path: "/sales", icon: <FaDollarSign /> },
-  { label: "Salespersons", path: "/salespersons", icon: <FaUserTie /> },
+  { label: "Sales Persons", path: "/salespersons", icon: <FaUserTie /> },
   { label: "Commissions", path: "/commissions", icon: <FaTags /> },
 ];
 
@@ -31,9 +31,7 @@ const App = () => {
           <Route path="/sales" element={<Sales />} />
           <Route path="/salespersons" element={<SalesPersons />} />
           <Route path="/commissions" element={ <Commissions />} />
-          
-          {/* Optional: Add a 404 page */}
-          {/* Optional: Redirect unknown routes to default */}
+        
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </main>

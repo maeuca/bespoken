@@ -1,0 +1,114 @@
+import React, { useState } from 'react';
+import { SalesPersonsService } from '../../types/openapi/services/SalesPersonsService';
+import type { SalesPerson } from '../../types/openapi/models/SalesPerson';
+import { formRowStyle, inputStyle, labelStyle } from '../../styles';
+
+interface Props {
+  onAdd: (newPerson: SalesPerson) => void;
+  onClose: () => void;
+  salesPersons: SalesPerson[];
+}
+
+const dialogStyle: React.CSSProperties = {
+  position: 'fixed',
+  top: '20%',
+  left: '50%',
+  transform: 'translateX(-50%)',
+  backgroundColor: 'white',
+  padding: '2rem',
+  border: '1px solid #ccc',
+  boxShadow: '0 0 10px rgba(0,0,0,0.3)',
+  zIndex: 1000,
+};
+
+export const SalesPersonAddDialog: React.FC<Props> = ({ onAdd, onClose, salesPersons }) => {
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [address, setAddress] = useState('');
+  const [phone, setPhone] = useState('');
+  const [startDate, setStartDate] = useState('');
+  const [manager, setManager] = useState('');
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const handleSubmit = async () => {
+    setSubmitting(true);
+    setError(null);
+
+    const duplicate = salesPersons.some(p =>
+    p.firstName.trim().toLowerCase() === firstName.trim().toLowerCase() &&
+    p.lastName.trim().toLowerCase() === lastName.trim().toLowerCase()
+  );
+    if (duplicate) {
+      setError('A salesperson with this name already exists.');
+      setSubmitting(false);
+      return;
+    }
+    try {
+      const newSalesPerson: SalesPerson = {
+        id: 0,
+        firstName,
+        lastName,
+        address,
+        phone,
+        startDate,  // ISO 8601 format string (e.g. "2025-06-14")
+        manager,
+      };
+
+      const created = await SalesPersonsService.postApiSalesPersons(newSalesPerson);
+      onAdd(created);
+      onClose();
+    } catch (err) {
+      console.error(err);
+      setError('Failed to add salesperson. Please try again.');
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  return (
+    <div style={dialogStyle}>
+      <h3>New SalesPerson</h3>
+
+      <div style={formRowStyle}>
+        <label style={labelStyle}>First Name:</label>
+        <input style={inputStyle} value={firstName} onChange={e => setFirstName(e.target.value)} />
+      </div>
+
+      <div style={formRowStyle}>
+        <label style={labelStyle}>Last Name:</label>
+        <input style={inputStyle} value={lastName} onChange={e => setLastName(e.target.value)} />
+      </div>
+
+      <div style={formRowStyle}>
+        <label style={labelStyle}>Address:</label>
+        <input style={inputStyle} value={address} onChange={e => setAddress(e.target.value)} />
+      </div>
+
+      <div style={formRowStyle}>
+        <label style={labelStyle}>Phone:</label>
+        <input style={inputStyle} value={phone} onChange={e => setPhone(e.target.value)} />
+      </div>
+
+      <div style={formRowStyle}>
+        <label style={labelStyle}>Start Date:</label>
+        <input style={inputStyle} type="date" value={startDate} onChange={e => setStartDate(e.target.value)} />
+      </div>
+
+      <div style={formRowStyle}>
+        <label style={labelStyle}>Manager:</label>
+        <input style={inputStyle} value={manager} onChange={e => setManager(e.target.value)} />
+      </div>
+
+      {error && <p style={{ color: 'red' }}>{error}</p>}
+
+      <div style={{ marginTop: '1rem' }}>
+        <button onClick={handleSubmit} disabled={submitting} style={{ marginRight: '10px' }}>
+          {submitting ? 'Adding...' : 'Add'}
+        </button>
+        <button onClick={onClose}>Cancel</button>
+      </div>
+    </div>
+  );
+};
+

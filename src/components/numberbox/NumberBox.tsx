@@ -14,7 +14,7 @@ export const NumberBox: React.FC<NumberBoxProps> = ({ value, label, onChange }) 
       <input
         type="number"
         style={inputStyle}
-        value={isNaN(value) ? '' : value}
+        value={isNaN(value ?? NaN) ? '' : value}
         onChange={(e) => onChange(parseFloat(e.target.value))}
       />
     </div>

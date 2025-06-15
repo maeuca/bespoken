@@ -1,10 +1,12 @@
-import React from "react";
-import ProductsTable from "./ProductsTable";
+import React, { Suspense, lazy } from 'react';
+const ProductsTable = lazy(() => import('./ProductsTable'));
 
 export const Products: React.FC = () => {
     return (
         <div>
-            <ProductsTable />
+        <Suspense fallback={<p>Loading products table...</p>}>
+        <ProductsTable />
+        </Suspense>
         </div>
     );
 }   

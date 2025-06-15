@@ -67,12 +67,12 @@ export function PaginatedTable<T>({
   return (
     <div>
       <h2 style={{ marginBottom: '1rem' }}>{title}</h2>
-      <div style={{ 
-        display: 'flex', 
+      <div style={{
+        display: 'flex',
         justifyContent: renderFilterBar ? 'space-between' : 'flex-end',
-        alignItems: 'center', 
-        marginBottom: '1rem' 
-        }}>
+        alignItems: 'center',
+        marginBottom: '1rem'
+      }}>
         {/* Filter Bar */}
         {renderFilterBar && (
           <div>
@@ -132,7 +132,10 @@ export function PaginatedTable<T>({
         </thead>
         <tbody>
           {currentData.map((row, index) => (
-            <tr key={(row as any).id ?? `row-${index}`}>
+            <tr
+              key={(row as any).id ?? `row-${index}`}
+              style={{ backgroundColor: index % 2 === 0 ? '#ffffff' : '#f5f5f5' }}
+            >
               {columns
                 .filter((col) => col.accessor !== 'id')
                 .map((col) => (
@@ -167,6 +170,7 @@ export function PaginatedTable<T>({
             </tr>
           ))}
         </tbody>
+
 
       </table>
 

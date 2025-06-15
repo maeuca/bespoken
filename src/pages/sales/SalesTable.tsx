@@ -70,7 +70,7 @@ const SalesTable: React.FC = () => {
     const columns: Column<Sale>[] = [
         {
             header: 'Product',
-            accessor: 'product',
+            accessor: 'productName' as keyof Sale,
             render: (_, row) => row.product?.name ?? '—',
         },
         {
@@ -93,7 +93,7 @@ const SalesTable: React.FC = () => {
         },
         {
             header: 'Price',
-            accessor: 'product',
+            accessor: 'productPrice' as keyof Sale,
             render: (_, row) =>
                 row.product?.salePrice != null ? `$${row.product.salePrice.toFixed(2)}` : '—',
         },
@@ -105,7 +105,7 @@ const SalesTable: React.FC = () => {
         },
         {
             header: 'Commission',
-            accessor: 'salesPerson',
+            accessor: 'commission' as keyof Sale,
             render: (_, row) => {
                 const price = row.product?.salePrice ?? 0;
                 const pct = row.product?.commissionPercentage ?? 0;

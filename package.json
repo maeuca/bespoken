@@ -13,7 +13,7 @@
     "generate:api": "npm run download:swagger && npm run generate:types",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "test": "vitest run src",
+    "test": "vitest run",
     "test:ui": "vitest --ui",
     "test:coverage": "vitest run --coverage"
   },

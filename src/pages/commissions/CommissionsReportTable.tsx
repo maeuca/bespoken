@@ -3,6 +3,7 @@ import { PaginatedTable } from '../../components/table/PaginatedTable';
 import { SalesService } from '../../types/openapi/services/SalesService';
 import type { Sale } from '../../types/openapi/models/Sale';
 import type { Column } from '../../components/table/PaginatedTable';
+import { Loader } from '../../components/loader/Loader';
 
 type CommissionRow = {
   salesPersonName: string;
@@ -64,7 +65,7 @@ const CommissionReportTable: React.FC = () => {
     },
   ];
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) return <Loader/>;
 
   return (
     <PaginatedTable

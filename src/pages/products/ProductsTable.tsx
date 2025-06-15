@@ -1,18 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { PaginatedTable } from '../../components/table/PaginatedTable';
 import type { Product } from '../../types/openapi/models/Product';
-import { ProductsService } from '../../types/openapi/services/ProductsService'; // Adjust path if needed
+import { ProductsService } from '../../types/openapi/services/ProductsService';
 import type { Column } from '../../components/table/PaginatedTable';
 import ProductEditDialog from './ProductEditDialog';
 import ProductAddDialog from './ProductAddDialog';
 import Confirmation from '../../components/alerts/Confirmation';
+import { Loader } from '../../components/loader/Loader';
 
 const ProductsTable: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    ProductsService.getApiProducts() // Replace with correct service function name
+    ProductsService.getApiProducts() 
       .then(setProducts)
       .catch(console.error)
       .finally(() => setLoading(false));
@@ -42,7 +43,7 @@ const ProductsTable: React.FC = () => {
   );
   const renderAddDialog = (close: () => void) => (
     <ProductAddDialog
-      products={products} // Pass existing products for duplicate check
+      products={products} 
       onAdd={(newProduct) => {
         setProducts(prev => [...prev, newProduct]);
       }}
@@ -70,7 +71,7 @@ const ProductsTable: React.FC = () => {
     />
   );
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) return <Loader/>;
 
   return (
     <PaginatedTable

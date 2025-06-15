@@ -7,6 +7,7 @@ import { PaginatedTable } from '../../components/table/PaginatedTable';
 import SalesPersonEditDialog from './SalesPersonEditDialog';
 import { SalesPersonAddDialog } from './SalesPersonAddDialog';
 import Confirmation from '../../components/alerts/Confirmation';
+import { Loader } from '../../components/loader/Loader';
 
 const SalesPersonsTable: React.FC = () => {
   const [salesPeople, setSalesPeople] = useState<SalesPerson[]>([]);
@@ -80,7 +81,7 @@ const SalesPersonsTable: React.FC = () => {
     confirmLabel="Delete"
   />
 );
-  if (loading) return <p>Loading...</p>;
+  if (loading) return <Loader/>;
 
   return (
     <PaginatedTable

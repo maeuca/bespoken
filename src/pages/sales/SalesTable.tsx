@@ -11,6 +11,7 @@ import SalesAddDialog from './SalesAddDialog';
 import type { Customer, Product, SalesPerson } from '../../types/openapi';
 import SalesEditDialog from './SalesEditDialog';
 import Confirmation from '../../components/alerts/Confirmation';
+import { Loader } from '../../components/loader/Loader';
 
 const SalesTable: React.FC = () => {
     const [sales, setSales] = useState<Sale[]>([]);
@@ -134,7 +135,7 @@ const SalesTable: React.FC = () => {
             customers={customers}
             salesPeople={salesPeople}
             onUpdate={() => {
-                fetchData(); // refetch after edit
+                fetchData();
             }}
             onClose={close}
         />
@@ -149,7 +150,7 @@ const SalesTable: React.FC = () => {
                 try {
                     if (row.id === undefined) throw new Error('Missing sale ID');
                     await SalesService.deleteApiSales(row.id);
-                    fetchData(); // Refresh data after deletion
+                    fetchData();
                 } catch (err) {
                     console.error('Delete failed', err);
                 } finally {
@@ -188,7 +189,7 @@ const SalesTable: React.FC = () => {
 
     );
 
-    if (loading) return <p>Loading...</p>;
+    if (loading) return <Loader/>;
 
     return (
         <PaginatedTable

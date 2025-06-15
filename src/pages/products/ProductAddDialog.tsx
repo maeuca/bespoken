@@ -8,7 +8,7 @@ import Dialog from '../../components/dialog/Dialog';
 interface Props {
   onAdd: (newProduct: Product) => void;
   onClose: () => void;
-  products: Product[]; // Optional, used for duplicate check
+  products: Product[]; 
 }
 
 const ProductAddDialog: React.FC<Props> = ({ onAdd, onClose, products }) => {
@@ -37,7 +37,7 @@ const ProductAddDialog: React.FC<Props> = ({ onAdd, onClose, products }) => {
 
     try {
       const newProduct: Product = {
-        id: 0, // assumed to be auto-generated
+        id: 0, 
         name,
         manufacturer,
         style,

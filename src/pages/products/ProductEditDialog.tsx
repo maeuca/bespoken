@@ -25,7 +25,7 @@ const ProductEditDialog: React.FC<Props> = ({ product, onUpdate, onClose }) => {
     setError(null);
     try {
       if (form.id === undefined) throw new Error('Product ID is missing');
-      await ProductsService.putApiProducts(form.id, form); // Adjust service method name if needed
+      await ProductsService.putApiProducts(form.id, form);
       onUpdate(form);
       onClose();
     } catch (err) {

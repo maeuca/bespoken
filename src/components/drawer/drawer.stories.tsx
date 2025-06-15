@@ -1,5 +1,5 @@
 import React from 'react';
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Drawer, type DrawerItem } from './Drawer';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { FaHome, FaUser, FaCog } from 'react-icons/fa';

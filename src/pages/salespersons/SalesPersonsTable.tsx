@@ -95,16 +95,4 @@ const SalesPersonsTable: React.FC = () => {
   );
 };
 
-const dialogStyle: React.CSSProperties = {
-  position: 'fixed',
-  top: '20%',
-  left: '50%',
-  transform: 'translateX(-50%)',
-  backgroundColor: 'white',
-  padding: '2rem',
-  border: '1px solid #ccc',
-  boxShadow: '0 0 10px rgba(0,0,0,0.3)',
-  zIndex: 1000,
-};
-
 export default SalesPersonsTable;

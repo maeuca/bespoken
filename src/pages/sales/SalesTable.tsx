@@ -82,7 +82,7 @@ const SalesTable: React.FC = () => {
         {
             header: 'Date',
             accessor: 'date',
-            render: (value, _row) => {
+            render: (value) => {
                 try {
                     return format(new Date(value as string), 'MMM dd, yyyy');
                 } catch {

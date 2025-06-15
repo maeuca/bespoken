@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { ProductsService } from '../../types/openapi/services/ProductsService';
 import type { Product } from '../../types/openapi/models/Product';
-import { formRowStyle, labelStyle } from '../../styles';
 import { TextBox } from '../../components/textbox/Textbox';
 import { NumberBox } from '../../components/numberbox/NumberBox';
 import Dialog from '../../components/dialog/Dialog';

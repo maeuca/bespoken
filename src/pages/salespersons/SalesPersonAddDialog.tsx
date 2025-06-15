@@ -11,18 +11,6 @@ interface Props {
   salesPersons: SalesPerson[];
 }
 
-const dialogStyle: React.CSSProperties = {
-  position: 'fixed',
-  top: '20%',
-  left: '50%',
-  transform: 'translateX(-50%)',
-  backgroundColor: 'white',
-  padding: '2rem',
-  border: '1px solid #ccc',
-  boxShadow: '0 0 10px rgba(0,0,0,0.3)',
-  zIndex: 1000,
-};
-
 export const SalesPersonAddDialog: React.FC<Props> = ({ onAdd, onClose, salesPersons }) => {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -109,6 +97,6 @@ export const SalesPersonAddDialog: React.FC<Props> = ({ onAdd, onClose, salesPer
       {error && <p style={{ color: 'red' }}>{error}</p>}
 
       </Dialog>
-  );0
+  );
 };
 

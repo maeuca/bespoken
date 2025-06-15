@@ -7,15 +7,31 @@ interface TextBoxProps {
   onChange: (value: string) => void;
 }
 export const TextBox: React.FC<TextBoxProps> = ({ value, label, onChange }) => {
-  return (
-    <div style={formRowStyle}>
-        <label style={labelStyle}>{label}</label>
+  const inputId = React.useId();
+  if (label) {
+    return (
+      <div style={formRowStyle}>
+        <label htmlFor={inputId} style={labelStyle}>
+          {label}
+        </label>
         <input 
-        type="text" 
-        style={inputStyle} 
-        value={value} 
-        onChange={e => onChange(e.target.value)} />
-    </div>
-   
-  );
+          id={inputId} 
+          type="text" 
+          style={inputStyle} 
+          value={value} 
+          onChange={e => onChange(e.target.value)} />
+      </div>
+    );
+  } else {
+    return (
+      <div style={formRowStyle}>
+        <input 
+          type="text" 
+          style={inputStyle} 
+          value={value} 
+          onChange={e => onChange(e.target.value)} />
+      </div>
+    );
+  }
+ 
 };

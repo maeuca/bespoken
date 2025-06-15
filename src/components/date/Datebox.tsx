@@ -7,15 +7,22 @@ interface DateBoxProps {
   onChange: (value: string) => void;
 }
 export const DateBox: React.FC<DateBoxProps> = ({ value, label, onChange }) => {
-  return (
+  const inputId = React.useId(); // unique ID for label-input linking
+
+   return (
     <div style={formRowStyle}>
-        <label style={labelStyle}>{label}</label>
-        <input 
-        type="date" 
-        style={inputStyle} 
-        value={value} 
-        onChange={e => onChange(e.target.value)} />
+      {label && (
+        <label htmlFor={inputId} style={labelStyle}>
+          {label}
+        </label>
+      )}
+      <input
+        id={inputId}
+        type="date"
+        style={inputStyle}
+        value={value}
+        onChange={e => onChange(e.target.value)}
+      />
     </div>
-   
   );
 };

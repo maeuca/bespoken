@@ -15,6 +15,7 @@ export const SelectList: React.FC<{
         <div style={formRowStyle}>
             <label style={labelStyle}>{label}</label>
             <select style={inputStyle} value={selectedItem} onChange={(e) => onSelect(Number(e.target.value))}>
+                <option value="">-- Select an option --</option>
                 {items.map((p) => (
                     <option key={p.id} value={p.id}>
                         {p.name}

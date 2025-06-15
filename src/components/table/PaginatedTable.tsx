@@ -16,6 +16,7 @@ type PaginatedTableProps<T> = {
   renderEditDialog?: (row: T, close: () => void) => React.ReactNode;
   renderAddDialog?: (close: () => void) => React.ReactNode;
   renderDeleteDialog?: (row: T, close: () => void) => React.ReactNode;
+  renderFilterBar?: () => React.ReactNode;
 };
 
 export function PaginatedTable<T>({
@@ -26,6 +27,7 @@ export function PaginatedTable<T>({
   renderEditDialog,
   renderAddDialog,
   renderDeleteDialog,
+  renderFilterBar,
 }: PaginatedTableProps<T>) {
   const [currentPage, setCurrentPage] = useState(1);
   const [editingRow, setEditingRow] = useState<T | null>(null);
@@ -65,11 +67,21 @@ export function PaginatedTable<T>({
   return (
     <div>
       <h2 style={{ marginBottom: '1rem' }}>{title}</h2>
+      <div style={{ 
+        display: 'flex', 
+        justifyContent: renderFilterBar ? 'space-between' : 'flex-end',
+        alignItems: 'center', 
+        marginBottom: '1rem' 
+        }}>
+        {/* Filter Bar */}
+        {renderFilterBar && (
+          <div>
+            {renderFilterBar()}
+          </div>
+        )}
 
-      {/* Edit Dialog Button */}
-      {/* New Record Button */}
-      {renderAddDialog && (
-        <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '0.5rem' }}>
+        {/* New Record Button */}
+        {renderAddDialog && (
           <button
             onClick={() => setShowAddDialog(true)}
             style={{
@@ -86,8 +98,8 @@ export function PaginatedTable<T>({
             <FaPlus size={14} />
             New Record
           </button>
-        </div>
-      )}
+        )}
+      </div>
 
       {/* Table */}
       <table style={{ width: '100%', borderCollapse: 'collapse' }}>

@@ -3,25 +3,13 @@ import { SalesPersonsService } from '../../types/openapi/services/SalesPersonsSe
 import type { SalesPerson } from '../../types/openapi/models/SalesPerson';
 import { DateBox } from '../../components/date/Datebox';
 import { TextBox } from '../../components/textbox/Textbox';
+import { Dialog } from '../../components/dialog/Dialog';
 
 interface Props {
   salesPerson: SalesPerson;
   onUpdate: (updatedPerson: SalesPerson) => void;
   onClose: () => void;
 }
-
-const dialogStyle: React.CSSProperties = {
-  position: 'fixed',
-  top: '20%',
-  left: '50%',
-  transform: 'translateX(-50%)',
-  backgroundColor: 'white',
-  padding: '2rem',
-  border: '1px solid #ccc',
-  boxShadow: '0 0 10px rgba(0,0,0,0.3)',
-  width: '330px',
-  zIndex: 1000,
-};
 
 const SalesPersonEditDialog: React.FC<Props> = ({ salesPerson, onUpdate, onClose }) => {
   const [firstName, setFirstName] = useState(salesPerson.firstName);
@@ -32,6 +20,14 @@ const SalesPersonEditDialog: React.FC<Props> = ({ salesPerson, onUpdate, onClose
     if (!salesPerson.startDate) return '';
     try {
       return new Date(salesPerson.startDate).toISOString().split('T')[0];
+    } catch {
+      return '';
+    }
+  });
+   const [terminationDate, setTerminationDate] = useState(() => {
+    if (!salesPerson.terminationDate) return '';
+    try {
+      return new Date(salesPerson.terminationDate).toISOString().split('T')[0];
     } catch {
       return '';
     }
@@ -52,6 +48,7 @@ const SalesPersonEditDialog: React.FC<Props> = ({ salesPerson, onUpdate, onClose
         address,
         phone,
         startDate,
+        terminationDate,
         manager,
       };
 
@@ -70,8 +67,12 @@ const SalesPersonEditDialog: React.FC<Props> = ({ salesPerson, onUpdate, onClose
   };
 
   return (
-    <div style={dialogStyle}>
-      <h3>Edit SalesPerson</h3>
+     <Dialog
+      title="Edit SalesPerson"
+      onConfirm={handleSubmit}
+      onCancel={onClose}
+      submitting={submitting}
+    >
 
       <TextBox
         value={firstName}
@@ -98,6 +99,11 @@ const SalesPersonEditDialog: React.FC<Props> = ({ salesPerson, onUpdate, onClose
         label="Start Date"
         onChange={setStartDate} />
 
+      <DateBox
+        value={terminationDate}
+        label="Termination Date"
+        onChange={setTerminationDate} />  
+
       <TextBox
         value={manager}
         label="Manager"
@@ -105,13 +111,7 @@ const SalesPersonEditDialog: React.FC<Props> = ({ salesPerson, onUpdate, onClose
 
       {error && <p style={{ color: 'red' }}>{error}</p>}
 
-      <div style={{ marginTop: '1rem' }}>
-        <button onClick={handleSubmit} disabled={submitting} style={{ marginRight: '10px' }}>
-          {submitting ? 'Saving...' : 'Save'}
-        </button>
-        <button onClick={onClose}>Cancel</button>
-      </div>
-    </div>
+      </Dialog>
   );
 };
 

@@ -6,6 +6,7 @@ import type { Column } from '../../components/table/PaginatedTable';
 import { PaginatedTable } from '../../components/table/PaginatedTable';
 import SalesPersonEditDialog from './SalesPersonEditDialog';
 import { SalesPersonAddDialog } from './SalesPersonAddDialog';
+import Confirmation from '../../components/alerts/Confirmation';
 
 const SalesPersonsTable: React.FC = () => {
   const [salesPeople, setSalesPeople] = useState<SalesPerson[]>([]);
@@ -25,6 +26,13 @@ const SalesPersonsTable: React.FC = () => {
     { header: 'Address', accessor: 'address' },
     { header: 'Phone', accessor: 'phone' },
     { header: 'Start Date', accessor: 'startDate', render: (value) => {
+      try {
+        return format(new Date(value as string), 'MMM dd, yyyy');
+      } catch {
+        return value;
+      }
+    }, },
+     { header: 'Termination Date', accessor: 'terminationDate', render: (value) => {
       try {
         return format(new Date(value as string), 'MMM dd, yyyy');
       } catch {
@@ -57,30 +65,21 @@ const SalesPersonsTable: React.FC = () => {
   );
 
   const renderDeleteDialog = (row: SalesPerson, close: () => void) => (
-    <div style={dialogStyle}>
-      <h3>Confirm Delete</h3>
-      <p>Are you sure you want to delete {row.firstName} {row.lastName}?</p>
-      <button
-        onClick={() => {
-          if (row.id !== undefined) {
-            SalesPersonsService.deleteApiSalesPersons(row.id).then(() => {
-              setSalesPeople(prev => prev.filter(p => p.id !== row.id));
-              console.log(`Deleted sales person with ID: ${row.id}`);
-            }).catch(console.error);
-            setSalesPeople(prev => prev.filter(p => p.id !== row.id));
-          } else {
-            console.error('Cannot delete sales person: id is undefined');
-          }
-          close();
-        }}
-        style={{ backgroundColor: 'red', color: 'white', marginRight: '10px' }}
-      >
-        Delete
-      </button>
-      <button onClick={close}>Cancel</button>
-    </div>
-  );
-
+  <Confirmation
+    title="Confirm Delete"
+    message={`Are you sure you want to delete ${row.firstName} ${row.lastName}?`}
+    onConfirm={() => {
+      if (row.id !== undefined) {
+        SalesPersonsService.deleteApiSalesPersons(row.id).then(() => {
+          setSalesPeople(prev => prev.filter(p => p.id !== row.id));
+        }).catch(console.error);
+      }
+      close();
+    }}
+    onCancel={close}
+    confirmLabel="Delete"
+  />
+);
   if (loading) return <p>Loading...</p>;
 
   return (

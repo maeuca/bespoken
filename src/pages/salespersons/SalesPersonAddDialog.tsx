@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { SalesPersonsService } from '../../types/openapi/services/SalesPersonsService';
 import type { SalesPerson } from '../../types/openapi/models/SalesPerson';
-import { formRowStyle, inputStyle, labelStyle } from '../../styles';
 import { TextBox } from '../../components/textbox/Textbox';
 import { DateBox } from '../../components/date/Datebox';
+import Dialog from '../../components/dialog/Dialog';
 
 interface Props {
   onAdd: (newPerson: SalesPerson) => void;
@@ -69,8 +69,12 @@ export const SalesPersonAddDialog: React.FC<Props> = ({ onAdd, onClose, salesPer
   };
 
   return (
-    <div style={dialogStyle}>
-      <h3>New SalesPerson</h3>
+      <Dialog
+          title="New SalesPerson"
+          onConfirm={handleSubmit}
+          onCancel={onClose}
+          submitting={submitting}
+        >
 
       <TextBox
         value={firstName}
@@ -104,13 +108,7 @@ export const SalesPersonAddDialog: React.FC<Props> = ({ onAdd, onClose, salesPer
 
       {error && <p style={{ color: 'red' }}>{error}</p>}
 
-      <div style={{ marginTop: '1rem' }}>
-        <button onClick={handleSubmit} disabled={submitting} style={{ marginRight: '10px' }}>
-          {submitting ? 'Adding...' : 'Add'}
-        </button>
-        <button onClick={onClose}>Cancel</button>
-      </div>
-    </div>
-  );
+      </Dialog>
+  );0
 };
 

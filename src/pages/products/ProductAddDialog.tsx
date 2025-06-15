@@ -4,6 +4,7 @@ import type { Product } from '../../types/openapi/models/Product';
 import { formRowStyle, labelStyle } from '../../styles';
 import { TextBox } from '../../components/textbox/Textbox';
 import { NumberBox } from '../../components/numberbox/NumberBox';
+import Dialog from '../../components/dialog/Dialog';
 
 interface Props {
   onAdd: (newProduct: Product) => void;
@@ -11,33 +12,14 @@ interface Props {
   products: Product[]; // Optional, used for duplicate check
 }
 
-const dialogStyle: React.CSSProperties = {
-  position: 'fixed',
-  top: '20%',
-  left: '50%',
-  transform: 'translateX(-50%)',
-  backgroundColor: 'white',
-  padding: '2rem',
-  border: '1px solid #ccc',
-  boxShadow: '0 0 10px rgba(0,0,0,0.3)',
-  width: '40%',
-  zIndex: 1000,
-};
-
-const inputStyle: React.CSSProperties = {
-  width: '100%',
-  padding: '6px',
-  marginBottom: '10px',
-};
-
 const ProductAddDialog: React.FC<Props> = ({ onAdd, onClose, products }) => {
   const [name, setName] = useState('');
   const [manufacturer, setManufacturer] = useState('');
   const [style, setStyle] = useState('');
-  const [purchasePrice, setPurchasePrice] = useState<number>();
-  const [salePrice, setSalePrice] = useState<number>();
-  const [qtyOnHand, setQtyOnHand] = useState<number>();
-  const [commissionPercentage, setCommissionPercentage] = useState<number>();
+  const [purchasePrice, setPurchasePrice] = useState<number>(0);
+  const [salePrice, setSalePrice] = useState<number>(0);
+  const [qtyOnHand, setQtyOnHand] = useState<number>(0);
+  const [commissionPercentage, setCommissionPercentage] = useState<number>(0);
 
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -78,10 +60,14 @@ const ProductAddDialog: React.FC<Props> = ({ onAdd, onClose, products }) => {
   };
 
   return (
-    <div style={dialogStyle}>
-      <h3>Add New Product</h3>
-
-
+     <Dialog
+          title="Add New Product"
+          onConfirm={handleSubmit}
+          onCancel={onClose}
+          confirmLabel="Add"
+          submitting={submitting}
+        >
+          
       <TextBox
         value={name}
         label="First Name"
@@ -124,13 +110,7 @@ const ProductAddDialog: React.FC<Props> = ({ onAdd, onClose, products }) => {
 
       {error && <p style={{ color: 'red' }}>{error}</p>}
 
-      <div style={{ marginTop: '1rem' }}>
-        <button onClick={handleSubmit} disabled={submitting} style={{ marginRight: '10px' }}>
-          {submitting ? 'Adding...' : 'Add'}
-        </button>
-        <button onClick={onClose}>Cancel</button>
-      </div>
-    </div>
+      </Dialog>
   );
 
 };

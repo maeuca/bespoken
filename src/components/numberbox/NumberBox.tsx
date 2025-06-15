@@ -2,7 +2,7 @@ import React from 'react';
 import { formRowStyle, labelStyle, inputStyle } from '../../styles';
 
 interface NumberBoxProps {
-  value: number;
+  value?: number;
   label?: string;
   onChange: (value: number) => void;
 }

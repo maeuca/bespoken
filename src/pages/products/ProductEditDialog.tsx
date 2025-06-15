@@ -3,31 +3,13 @@ import type { Product } from '../../types/openapi/models/Product';
 import { ProductsService } from '../../types/openapi/services/ProductsService';
 import { TextBox } from '../../components/textbox/Textbox';
 import { NumberBox } from '../../components/numberbox/NumberBox';
+import { Dialog } from '../../components/dialog/Dialog';
 
 interface Props {
   product: Product;
   onUpdate: (updated: Product) => void;
   onClose: () => void;
 }
-
-const dialogStyle: React.CSSProperties = {
-  position: 'fixed',
-  top: '20%',
-  left: '50%',
-  transform: 'translateX(-50%)',
-  backgroundColor: 'white',
-  padding: '2rem',
-  border: '1px solid #ccc',
-  boxShadow: '0 0 10px rgba(0,0,0,0.3)',
-  zIndex: 1000,
-  width: '350px',
-};
-
-const inputStyle: React.CSSProperties = {
-  width: '100%',
-  padding: '4px',
-  marginBottom: '10px',
-};
 
 const ProductEditDialog: React.FC<Props> = ({ product, onUpdate, onClose }) => {
   const [form, setForm] = useState<Product>({ ...product });
@@ -55,8 +37,13 @@ const ProductEditDialog: React.FC<Props> = ({ product, onUpdate, onClose }) => {
   };
 
   return (
-    <div style={dialogStyle}>
-      <h3>Edit Product</h3>
+    <Dialog
+             title="Edit Product"
+             onConfirm={handleSubmit}
+             onCancel={onClose}
+             confirmLabel="Add"
+             submitting={submitting}
+           >
 
       <TextBox
         label="Name"
@@ -102,13 +89,7 @@ const ProductEditDialog: React.FC<Props> = ({ product, onUpdate, onClose }) => {
 
       {error && <p style={{ color: 'red' }}>{error}</p>}
 
-      <div style={{ marginTop: '1rem' }}>
-        <button onClick={handleSubmit} disabled={submitting} style={{ marginRight: '10px' }}>
-          {submitting ? 'Saving...' : 'Save'}
-        </button>
-        <button onClick={onClose}>Cancel</button>
-      </div>
-    </div>
+      </Dialog>
   );
 };
 

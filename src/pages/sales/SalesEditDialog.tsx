@@ -4,23 +4,31 @@ import type { Product } from '../../types/openapi/models/Product';
 import type { Customer } from '../../types/openapi/models/Customer';
 import type { SalesPerson } from '../../types/openapi/models/SalesPerson';
 import { SalesService } from '../../types/openapi/services/SalesService';
-import { SelectList } from '../../components/select/SelectList';
 import { DateBox } from '../../components/date/Datebox';
-import Dialog from '../../components/dialog/Dialog';
+import { SelectList } from '../../components/select/SelectList';
+import { Dialog } from '../../components/dialog/Dialog';
 
 interface Props {
+  sale: Sale;
   products: Product[];
   customers: Customer[];
   salesPeople: SalesPerson[];
-  onAdd: (sale: Sale) => void;
+  onUpdate: (updatedSale: Sale) => void;
   onClose: () => void;
 }
 
-const SalesAddDialog: React.FC<Props> = ({ products, customers, salesPeople, onAdd, onClose }) => {
-  const [productId, setProductId] = useState<number>(products[0]?.id ?? 0);
-  const [customerId, setCustomerId] = useState<number>(customers[0]?.id ?? 0);
-  const [salesPersonId, setSalesPersonId] = useState<number>(salesPeople[0]?.id ?? 0);
-  const [date, setDate] = useState<string>(new Date().toISOString().split('T')[0]);
+const SalesEditDialog: React.FC<Props> = ({ sale, products, customers, salesPeople, onUpdate, onClose }) => {
+  const [productId, setProductId] = useState<number>(sale.productId);
+  const [customerId, setCustomerId] = useState<number>(sale.customerId);
+  const [salesPersonId, setSalesPersonId] = useState<number>(sale.salesPersonId);
+  const [date, setDate] = useState<string>(() => {
+    try {
+      return new Date(sale.date).toISOString().split('T')[0];
+    } catch {
+      return '';
+    }
+  });
+
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -28,18 +36,22 @@ const SalesAddDialog: React.FC<Props> = ({ products, customers, salesPeople, onA
     setSubmitting(true);
     setError(null);
     try {
-      const newSale: Sale = {
+      const updatedSale: Sale = {
+        ...sale,
         productId,
         customerId,
         salesPersonId,
         date,
       };
-      const created = await SalesService.postApiSales(newSale);
-      onAdd(created);
+
+      if (!sale.id) throw new Error('Sale ID is missing');
+
+      await SalesService.putApiSales(sale.id, updatedSale);
+      onUpdate(updatedSale);
       onClose();
     } catch (err) {
       console.error(err);
-      setError('Failed to add sale.');
+      setError('Failed to update sale.');
     } finally {
       setSubmitting(false);
     }
@@ -47,17 +59,16 @@ const SalesAddDialog: React.FC<Props> = ({ products, customers, salesPeople, onA
 
   return (
     <Dialog
-      title="Add New Sale"
+      title="Edit Sale"
       onConfirm={handleSubmit}
       onCancel={onClose}
-      confirmLabel="Add"
+      confirmLabel="Save"
       submitting={submitting}
     >
-
       <SelectList
         items={products.map(p => ({ id: p.id, name: p.name }))}
-        label={'Product'}
-        selectedItem={productId.toString()}
+        label="Product"
+        selectedItem={productId}
         onSelect={(item) => {
           if (item !== undefined) {
             setProductId(Number(item));
@@ -66,8 +77,8 @@ const SalesAddDialog: React.FC<Props> = ({ products, customers, salesPeople, onA
       />
 
       <SelectList
-        items={customers.map(p => ({ id: p.id, name: `${p.firstName} ${p.lastName}` }))}
-        label={'Customer'}
+        items={customers.map(c => ({ id: c.id, name: `${c.firstName} ${c.lastName}` }))}
+        label="Customer"
         selectedItem={customerId}
         onSelect={(item) => {
           if (item !== undefined) {
@@ -78,14 +89,14 @@ const SalesAddDialog: React.FC<Props> = ({ products, customers, salesPeople, onA
 
       <SelectList
         items={salesPeople.map(s => ({ id: s.id, name: `${s.firstName} ${s.lastName}` }))}
-        label={'Salesperson'}
+        label="Salesperson"
         selectedItem={salesPersonId}
         onSelect={(item) => {
           if (item !== undefined) {
             setSalesPersonId(Number(item));
           }
-        }
-        } />
+        }}
+      />
 
       <DateBox
         value={date}
@@ -94,9 +105,8 @@ const SalesAddDialog: React.FC<Props> = ({ products, customers, salesPeople, onA
       />
 
       {error && <p style={{ color: 'red' }}>{error}</p>}
-
-      </Dialog>
+    </Dialog>
   );
 };
 
-export default SalesAddDialog;
+export default SalesEditDialog;
